@@ -10,4 +10,13 @@ public class Define : MonoBehaviour
         Cell = 3,
         Enemy = 7,
     }
+
+    public enum Synergy
+    {
+        Fire,
+        Rapid,
+        Slayer,
+        Fortune,
+        Delay
+    }
 }
