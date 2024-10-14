@@ -26404,7 +26404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minIntensity: 0.8
-  maxIntensity: 2
+  maxIntensity: 8
   speed: 0.65
 --- !u!4 &1705427228 stripped
 Transform:
