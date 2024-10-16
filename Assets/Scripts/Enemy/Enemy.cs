@@ -101,7 +101,6 @@ public class Enemy : MonoBehaviour
         ResourceManager.Instance.AddGold(_dropGold);
         // 몬스터 풀에 다시 넣음
         _spawner.OnReleaseEnemy(this.gameObject);
-        _spawner.AddDeadCount();
     }
     #region 이동 관련
     // 길을 따라 이동

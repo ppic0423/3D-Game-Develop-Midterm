@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlowEffectPool : PoolBase
+public class slowEffectPool : PoolBase
 {
     #region Singleton
-    private static SlowEffectPool _instance;
-    public static SlowEffectPool Instance
+    private static slowEffectPool _instance;
+    public static slowEffectPool Instance
     {
         get
         {

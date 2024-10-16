@@ -32,7 +32,7 @@ public class GatlingTurret : Turret
 
     protected override void Attack()
     {
-        if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta || restTimeDelta < 0)
+        if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta || restTimeDelta > 0)
             return;
 
         GameObject bulletGo = CommonBulletPool.Instance.pool.Get();

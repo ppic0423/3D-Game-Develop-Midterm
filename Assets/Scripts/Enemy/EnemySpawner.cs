@@ -64,10 +64,6 @@ public class EnemySpawner : MonoBehaviour
             pool.Get();
         }
     }
-    public void AddDeadCount()
-    {
-        deadEnemyCount++;
-    }
 
     #region ObjectPool
     ObjectPool<GameObject> pool; // 오브젝트 풀
@@ -118,8 +114,8 @@ public class EnemySpawner : MonoBehaviour
     public void OnReleaseEnemy(GameObject enemy)
     {
         enemy.SetActive(false); // 적 비활성화
+        deadEnemyCount++;
         remainEnemyText.text = (maxSpawnCount - deadEnemyCount).ToString();
-        Debug.Log(deadEnemyCount);
 
         // 모든 적이 사망한 경우
         if (deadEnemyCount == maxSpawnCount)
