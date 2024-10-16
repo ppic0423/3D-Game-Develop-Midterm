@@ -7,6 +7,7 @@ public class SlowTurret : Turret
     [SerializeField] Vector3 _range;
     [SerializeField] float _slowAmount;
     [SerializeField] float _slowDuration;
+    [SerializeField] GameObject _slowParticle;
 
     [Header("ÃÑ±¸ À§Ä¡")]
     [SerializeField] Vector3 muzzlePos;
@@ -42,12 +43,16 @@ public class SlowTurret : Turret
         if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta)
             return;
 
+        _slowParticle.GetComponent<ParticleSystem>().Play();
+        _slowParticle.gameObject.transform.LookAt(_target.transform.position);
+
         GameObject bulletGo = CommonBulletPool.Instance.pool.Get();
         bulletGo.AddComponent<SlowBullet>().Init(_target, _damage * _synergyDamagePlus, _bulletSpeed, _range);
 
         AddDebuffOnBullet(bulletGo);
 
         bulletGo.transform.position = transform.TransformPoint(muzzlePos);
+        bulletGo.transform.LookAt(_target);
 
         _attackIntervalDelta = 0;
     }

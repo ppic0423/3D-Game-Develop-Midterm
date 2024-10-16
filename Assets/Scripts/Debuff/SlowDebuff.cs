@@ -16,7 +16,7 @@ public class SlowDebuff : Debuff
         enemy.MoveSpeed *= _slowAmount;
         
         // 이펙트 적용
-        effect = slowEffectPool.Instance.pool.Get();
+        effect = SlowDebuffPool.Instance.pool.Get();
         effect.transform.parent = enemy.transform;
         effect.transform.localPosition = Vector3.zero;
         base.Apply();
@@ -28,6 +28,6 @@ public class SlowDebuff : Debuff
         enemy.MoveSpeed /= _slowAmount;
 
         // 이펙트 제거
-        slowEffectPool.Instance.pool.Release(effect);
+        SlowDebuffPool.Instance.pool.Release(effect);
     }
 }

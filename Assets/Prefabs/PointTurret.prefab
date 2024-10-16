@@ -211,6 +211,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 5619602252068770270, guid: 0e6c8e71855cb7e43924bf0c0dbace6e,
+        type: 3}
+      propertyPath: m_Name
+      value: Cylinder
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

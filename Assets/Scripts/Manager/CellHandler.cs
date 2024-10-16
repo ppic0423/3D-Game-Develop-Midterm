@@ -3,116 +3,139 @@ using UnityEngine;
 
 public class CellHandler : Selector
 {
-    [Header("Grid")]
-    public Grid grid;
+    [Header("UI Elements")]
+    private RectTransform currentUI;
+    [SerializeField] private RectTransform onTowerUI;
+    [SerializeField] private RectTransform emptyUI;
+    [SerializeField] private GameObject turretShop1;
+    [SerializeField] private GameObject turretShop2;
 
-    [Header("UI")]
-    RectTransform current_UI;
-    [SerializeField] RectTransform onTower_UI;
-    [SerializeField] RectTransform empty_UI;
-    [SerializeField] GameObject TurretShop_1;
-    [SerializeField] GameObject TurretShop_2;
+    [SerializeField] GameObject turretInfo_1;
+    [SerializeField] private GameObject turretInfo_2;
 
     public override void Enter()
     {
-        if (target.GetComponent<Tile>().turret != null)
+        Tile tile = target.GetComponent<Tile>();
+
+        if (tile.turret != null)
         {
-            onTower_UI.gameObject.SetActive(true);
-            current_UI = onTower_UI;
+            // 타일에 터렛이 있을 경우
+            onTowerUI.gameObject.SetActive(true);
+            currentUI = onTowerUI;
+            turretInfo_1.SetActive(true);
+            turretInfo_2.SetActive(false);
         }
         else
         {
-            empty_UI.gameObject.SetActive(true);
-            TurretShop_1.SetActive(true);
-            TurretShop_2.SetActive(false);
-            current_UI = empty_UI;
+            // 타일이 비어있을 경우
+            emptyUI.gameObject.SetActive(true);
+            turretShop1.SetActive(true);
+            turretShop2.SetActive(false);
+            currentUI = emptyUI;
         }
     }
+
     public override void Tick()
     {
-        current_UI.transform.position = Camera.main.WorldToScreenPoint(target.transform.position);
+        // UI의 위치를 타겟의 위치로 갱신
+        currentUI.transform.position = Camera.main.WorldToScreenPoint(target.transform.position);
     }
+
     public override void Exit()
     {
-        onTower_UI.gameObject.SetActive(false);
-        empty_UI.gameObject.SetActive(false);
+        // 모든 UI 비활성화
+        onTowerUI.gameObject.SetActive(false);
+        emptyUI.gameObject.SetActive(false);
     }
 
     // 터렛 생성
     public void BuildTurret(GameObject prefab)
     {
-        // 골드 확인
-        int cost = prefab.GetComponent<Turret>().Cost;
-        if (ResourceManager.Instance.Gold < cost)
+        Tile tile = target.GetComponent<Tile>();
+        Turret newTurret = prefab.GetComponent<Turret>();
+
+        // 골드 부족 시 반환
+        if (!CanAffordTurret(newTurret.Cost))
             return;
-        // 골드 사용
-        ResourceManager.Instance.UseGold(cost);
 
-        // 터렛 생성
-        GameObject go = Instantiate(prefab, target.transform);
-        Turret newTurret = go.GetComponent<Turret>();
-        target.GetComponent<Tile>().turret = newTurret;
+        // 터렛 생성 및 골드 차감
+        ResourceManager.Instance.UseGold(newTurret.Cost);
+        Turret turretInstance = Instantiate(prefab, tile.transform).GetComponent<Turret>();
+        tile.turret = turretInstance;
 
-        /* 시너지 적용 */
-
-        // 주변 타일 및 터렛 확인
-        List<Tile> neighbourTiles = grid.Neighbours(target.GetComponent<Tile>());
-        // 방금 만든 터렛 시너지 적용할 대상 수집
-        List<Turret> nearbyTurretsForNewTurret = new List<Turret>();
-
-        // 방금 만든 터렛에 시너지 적용
-        SynergyManager.Instance.CheckAndApplySynergy(newTurret, nearbyTurretsForNewTurret);
-        
-        // 주변 터렛 시너지 적용
-        foreach (Tile tile in neighbourTiles)
-        {
-            if (tile.turret != null)
-            {
-                nearbyTurretsForNewTurret.Add(tile.turret);
-
-                // 이웃 타일의 터렛 시너지를 적용할 대상 수집
-                List<Turret> neighbourTurretsForExistingTurret = new List<Turret>();
-                foreach (Tile neighbourTile in grid.Neighbours(tile))
-                {
-                    if (neighbourTile.turret != null)
-                    {
-                        neighbourTurretsForExistingTurret.Add(neighbourTile.turret);
-                    }
-                }
-
-                // 이웃 터렛 시너지 적용
-                SynergyManager.Instance.CheckAndApplySynergy(tile.turret, neighbourTurretsForExistingTurret);
-            }
-        }
-
-
+        // 주변 타일의 터렛 시너지 적용
+        List<Turret> nearbyTurrets = GetNearbyTurrets(tile);
+        ApplySynergies(turretInstance, nearbyTurrets);
 
         // 마우스 입력 해제
         mouseInput.SetSelector(null);
     }
+
     // 터렛 제거
     public void RemoveTurret()
     {
-        if (target.GetComponent<Tile>().turret == null)
+        Tile tile = target.GetComponent<Tile>();
+        if (tile.turret == null)
             return;
 
-        Destroy(target.GetComponent<Tile>().turret.gameObject);
-        target.GetComponent<Tile>().turret = null;
+        Destroy(tile.turret.gameObject);
+        tile.turret = null;
 
+        // 마우스 입력 해제
         mouseInput.SetSelector(null);
     }
+
     // 터렛 업그레이드
     public void UpgradeTurret()
     {
-        Turret targetTurret = target.GetComponent<Tile>().turret;
-
-        targetTurret.Upgrade();
+        Turret turret = target.GetComponent<Tile>().turret;
+        turret?.Upgrade();
     }
+
     // 터렛 판매
     public void SellTurret()
     {
-        Turret targetTurret = target.GetComponent<Tile>().turret;
+        Turret turret = target.GetComponent<Tile>().turret;
+        if (turret == null)
+            return;
 
-        ResourceManager.Instance.AddGold((int)(targetTurret.Cost * 2 / 3));
+        ResourceManager.Instance.AddGold((int)(turret.Cost * 2 / 3));
+        RemoveTurret();
+    }
+
+    // 터렛 구매 가능 여부 확인
+    private bool CanAffordTurret(int cost)
+    {
+        return ResourceManager.Instance.Gold >= cost;
+    }
+
+    // 시너지 적용 함수
+    private void ApplySynergies(Turret turret, List<Turret> nearbyTurrets)
+    {
+        // 새로 생성된 터렛에 시너지 적용
+        SynergyManager.Instance.CheckAndApplySynergy(turret, nearbyTurrets);
+
+        // 주변 터렛들의 시너지도 적용
+        foreach (Turret nearbyTurret in nearbyTurrets)
+        {
+            List<Turret> neighbourTurrets = GetNearbyTurrets(nearbyTurret.GetComponentInParent<Tile>());
+            SynergyManager.Instance.CheckAndApplySynergy(nearbyTurret, neighbourTurrets);
+        }
+    }
+
+    // 주변 타일에서 터렛을 찾는 함수
+    private List<Turret> GetNearbyTurrets(Tile tile)
+    {
+        List<Turret> nearbyTurrets = new List<Turret>();
+
+        foreach (Tile neighbor in tile.parentGrid.Neighbours(tile))
+        {
+            if (neighbor.turret != null)
+            {
+                nearbyTurrets.Add(neighbor.turret);
+            }
+        }
+
+        return nearbyTurrets;
     }
 }

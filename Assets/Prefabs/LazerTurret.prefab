@@ -54,7 +54,6 @@ MonoBehaviour:
   synergys: 0000000001000000
   _synergyAttackInterval: 0
   _synergyDamagePlus: 0
-  laserDistance: 50
   startPoint: {fileID: 6044482601441197848}
   endPoint: {fileID: 3816777246747479064}
   laserBody: {fileID: 1988545568553300151}
@@ -200,6 +199,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Laser
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619602252068770270, guid: 0e6c8e71855cb7e43924bf0c0dbace6e,
+        type: 3}
+      propertyPath: m_Name
+      value: Cylinder
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

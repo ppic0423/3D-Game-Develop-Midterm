@@ -197,6 +197,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4972262798928249796, guid: 2a335082c3f9ad54ea54b2a1f871191b,
+        type: 3}
+      propertyPath: m_Name
+      value: TriStamp_Laser
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2a335082c3f9ad54ea54b2a1f871191b,
         type: 3}
       propertyPath: m_Name
