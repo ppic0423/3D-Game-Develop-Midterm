@@ -22,14 +22,14 @@ public abstract class Turret : MonoBehaviour
     #region 업그레이드
     [Header("업그레이드")]
     [HideInInspector] public int currentLevel = 0; // 현재 레벨
-    protected List<TurretUpgrade> upgrades = new List<TurretUpgrade>(); // 업그레이드 리스트
+    public List<TurretUpgrade> upgrades = new List<TurretUpgrade>(); // 업그레이드 리스트
     #endregion
     [Header("태그")]
     [SerializeField] public List<Define.Synergy> synergys = new List<Define.Synergy>();
     [HideInInspector] public List<Debuff> synergyDebuffs = new List<Debuff>();
     [HideInInspector] public float _synergyAttackInterval = 0;
     [HideInInspector] public float _synergyDamagePlus = 1;
-
+    [SerializeField] public AudioClip _fireSound;
     protected List<Debuff> debuffs = new List<Debuff>();
     protected Transform _target;
 

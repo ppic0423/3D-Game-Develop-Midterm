@@ -35,7 +35,7 @@ public class EnemySpawner : MonoBehaviour
         spawnCountDelta = maxSpawnCount;
         deadEnemyCount = 0;
         remainEnemyText.text = maxSpawnCount.ToString();
-        waveText.text = stage.ToString();
+        waveText.text = $"Wave {stage.ToString()}";
 
         // 사이클을 전부 돌았을 경우
         if (stage == enemyStats.Count)
@@ -124,7 +124,7 @@ public class EnemySpawner : MonoBehaviour
             battlePhase.ChangePhase();
             // 전투가 끝난 후 다음 스테이지
             stage++;
-            waveText.text = stage.ToString();
+            waveText.text = $"Wave {stage.ToString()}";
         }
     }
 

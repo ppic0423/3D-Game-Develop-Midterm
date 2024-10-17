@@ -52,6 +52,8 @@ public class PointTurret : Turret
 
         if (_target != null)
         {
+            SoundManager.Instance.PlaySound(_fireSound);
+
             ApplyDamageAndDebuffs(_target.GetComponent<Enemy>());
         }
     }

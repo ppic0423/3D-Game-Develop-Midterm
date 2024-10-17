@@ -30,6 +30,8 @@ public class RapidTurret : Turret
         if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta)
             return;
 
+        SoundManager.Instance.PlaySound(_fireSound);
+
         GameObject bulletGo = CommonBulletPool.Instance.pool.Get();
         bulletGo.AddComponent<CommonBullet>().Init(_target, _damage * _synergyDamagePlus, _bulletSpeed);
 

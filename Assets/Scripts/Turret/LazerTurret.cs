@@ -42,6 +42,8 @@ public class LazerTurret : Turret
         _target = FindLowestHpTarget();
         if (_target != null)
         {
+            SoundManager.Instance.PlaySound(_fireSound);
+
             ApplyDamageAndDebuffs(_target.GetComponent<Enemy>());
         }
     }

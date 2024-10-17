@@ -27,7 +27,7 @@ public class GatlingTurret : Turret
     void Update()
     {
         Tick();
-        restTime += Time.deltaTime;
+        restTimeDelta -= Time.deltaTime;
     }
 
     protected override void Attack()
@@ -40,7 +40,7 @@ public class GatlingTurret : Turret
         bulletGo.transform.position = transform.TransformPoint(muzzlePos);
 
         AddDebuffOnBullet(bulletGo);
-
+        SoundManager.Instance.PlaySound(_fireSound);
         _attackIntervalDelta = 0;
 
         // 휴식 시간 초기화
@@ -48,6 +48,7 @@ public class GatlingTurret : Turret
         if (fireCount == 0)
         {
             restTimeDelta = restTime;
+            fireCount = 20;
         }
     }
     public override void Upgrade()

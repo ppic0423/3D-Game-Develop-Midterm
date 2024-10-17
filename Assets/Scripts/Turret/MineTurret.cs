@@ -28,6 +28,8 @@ public class MineTurret : Turret
         if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta || mines.Count >= 20)
             return;
 
+        SoundManager.Instance.PlaySound(_fireSound);
+
         GameObject mineGo = MinePool.Instance.pool.Get();
         mineGo.transform.position = transform.TransformPoint(muzzlePos);
         mineGo.GetComponent<MineBullet>().Init(null, _damage * _synergyDamagePlus, _bulletSpeed, radius);

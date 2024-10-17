@@ -39,6 +39,7 @@ public class WeaknessTurret : Turret
         if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta)
             return;
 
+        SoundManager.Instance.PlaySound(_fireSound);
         // 오브젝트 풀에서 총알 가져오기
         GameObject bulletGo = CommonBulletPool.Instance.pool.Get(); 
         // 총알 컴포넌트 추가

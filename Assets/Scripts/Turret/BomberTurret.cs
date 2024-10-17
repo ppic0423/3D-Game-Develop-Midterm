@@ -32,6 +32,7 @@ public class BomberTurret : Turret
         GameObject bulletGo = MissilePool.Instance.pool.Get();
         bulletGo.AddComponent<BomberBullet>().Init(_target, _damage * _synergyDamagePlus, _bulletSpeed, _range);
         bulletGo.transform.position = transform.TransformPoint(muzzlePos);
+        SoundManager.Instance.PlaySound(_fireSound);
 
         AddDebuffOnBullet(bulletGo);
 
