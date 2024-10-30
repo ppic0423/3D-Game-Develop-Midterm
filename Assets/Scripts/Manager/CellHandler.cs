@@ -36,7 +36,7 @@ public class CellHandler : Selector
             if(turret.currentLevel == 2)
             {
                 level_UI.text = "LV\nMAX";
-                reinforcePrice.text = "";
+                reinforcePrice.text = "-";
             }
             else
             {
@@ -132,6 +132,8 @@ public class CellHandler : Selector
     {
         Turret targetTurret = target.GetComponent<Tile>().turret;
         targetTurret.Upgrade();
+        SoundManager.Instance.PlaySound(_sellSound);
+
         mouseInput.SetSelector(null);
 
     }

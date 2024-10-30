@@ -34,7 +34,7 @@ public class EnemySpawner : MonoBehaviour
         // 변수 초기화
         spawnCountDelta = maxSpawnCount;
         deadEnemyCount = 0;
-        remainEnemyText.text = maxSpawnCount.ToString();
+        remainEnemyText.text = $"{maxSpawnCount - deadEnemyCount}/{maxSpawnCount}";
         waveText.text = $"Wave {stage.ToString()}";
 
         // 사이클을 전부 돌았을 경우
@@ -100,7 +100,7 @@ public class EnemySpawner : MonoBehaviour
     private void ChangeEnemyModel(GameObject enemy)
     {
         // 스테이지에 따른 적 모델 변경 (스테이지에 맞는 모델 적용)
-        int modelIndex = stage % enemyModels.Count;
+        int modelIndex = (stage % enemyModels.Count) - 1;
         GameObject newModel = enemyModels[modelIndex];
 
         // 기존 모델 삭제 후 새로운 모델을 자식으로 추가
@@ -115,7 +115,7 @@ public class EnemySpawner : MonoBehaviour
     {
         enemy.SetActive(false); // 적 비활성화
         deadEnemyCount++;
-        remainEnemyText.text = (maxSpawnCount - deadEnemyCount).ToString();
+        remainEnemyText.text = $"{maxSpawnCount - deadEnemyCount}/{maxSpawnCount}";
 
         // 모든 적이 사망한 경우
         if (deadEnemyCount == maxSpawnCount)

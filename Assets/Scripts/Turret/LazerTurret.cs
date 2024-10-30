@@ -31,7 +31,7 @@ public class LazerTurret : Turret
 
     protected override void Attack()
     {
-        if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta)
+        if (_target == null )
         {
             ToggleLaser(false);
             return;
@@ -40,11 +40,13 @@ public class LazerTurret : Turret
         UpdateLaser();
 
         _target = FindLowestHpTarget();
-        if (_target != null)
-        {
-            SoundManager.Instance.PlaySound(_fireSound);
 
+        if (_target != null && _attackInterval - _synergyAttackInterval > _attackIntervalDelta)
+        {
+            Debug.Log(_attackIntervalDelta);
+            // SoundManager.Instance.PlaySound(_fireSound);
             ApplyDamageAndDebuffs(_target.GetComponent<Enemy>());
+            _attackIntervalDelta = 0;
         }
     }
 
@@ -69,7 +71,7 @@ public class LazerTurret : Turret
         // 범위 내에 적이 없을 경우
         if (hitColliders.Length == 0)
         {
-            lowestHp = 0;
+            lowestHp = float.MaxValue;
             _target = null;
             return null;
         }

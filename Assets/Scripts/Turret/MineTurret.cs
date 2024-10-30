@@ -25,14 +25,15 @@ public class MineTurret : Turret
 
     protected override void Attack()
     {
-        if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta || mines.Count >= 20)
+        if (_attackInterval - _synergyAttackInterval > _attackIntervalDelta || mines.Count >= 20)
             return;
 
-        SoundManager.Instance.PlaySound(_fireSound);
+        GetComponent<AudioSource>().PlayOneShot(_fireSound);
 
         GameObject mineGo = MinePool.Instance.pool.Get();
         mineGo.transform.position = transform.TransformPoint(muzzlePos);
-        mineGo.GetComponent<MineBullet>().Init(null, _damage * _synergyDamagePlus, _bulletSpeed, radius);
+
+        transform.LookAt(mineGo.GetComponent<MineBullet>().Init(null, _damage * _synergyDamagePlus, _bulletSpeed, radius));
 
         AddDebuffOnBullet(mineGo);
 

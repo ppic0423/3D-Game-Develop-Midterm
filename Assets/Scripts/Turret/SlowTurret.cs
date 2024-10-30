@@ -42,9 +42,9 @@ public class SlowTurret : Turret
         if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta)
             return;
 
-        SoundManager.Instance.PlaySound(_fireSound);
-
+        GetComponent<AudioSource>().PlayOneShot(_fireSound);
         GameObject bulletGo = CommonBulletPool.Instance.pool.Get();
+        GetComponent<ParticleSystem>().Play();
         bulletGo.AddComponent<SlowBullet>().Init(_target, _damage * _synergyDamagePlus, _bulletSpeed, _range);
 
         AddDebuffOnBullet(bulletGo);

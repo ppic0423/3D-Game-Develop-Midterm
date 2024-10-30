@@ -4,6 +4,7 @@ public class SlowDebuff : Debuff
 {
     float _slowAmount;
     GameObject effect;
+    float tempValue;
 
     public SlowDebuff(float duration, float slowAmount) : base(duration)
     {
@@ -13,10 +14,11 @@ public class SlowDebuff : Debuff
     public override void Apply()
     {
         // 효과 적용
-        enemy.MoveSpeed *= _slowAmount;
+        tempValue = enemy.MoveSpeed * _slowAmount;
+        enemy.MoveSpeed -= tempValue;
         
         // 이펙트 적용
-        effect = slowEffectPool.Instance.pool.Get();
+        effect = SlowDebuffPool.Instance.pool.Get();
         effect.transform.parent = enemy.transform;
         effect.transform.localPosition = Vector3.zero;
         base.Apply();
@@ -25,9 +27,9 @@ public class SlowDebuff : Debuff
     {
         base.Remove();
         // 효과 제거
-        enemy.MoveSpeed /= _slowAmount;
+        enemy.MoveSpeed += tempValue;
 
         // 이펙트 제거
-        slowEffectPool.Instance.pool.Release(effect);
+        SlowDebuffPool.Instance.pool.Release(effect);
     }
 }

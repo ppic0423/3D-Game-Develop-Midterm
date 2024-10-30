@@ -29,20 +29,7 @@ public class PointTurret : Turret
 
     protected override void Attack()
     {
-        /*if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta)
-            return;
-
-        GameObject bulletGo = BulletPool.Instance.pool.Get();
-
-        bulletGo.AddComponent<CommonBullet>().Init(_target, (_damage + damageIncrease) * _synergyDamagePlus, _bulletSpeed);
-
-        AddDebuffOnBullet(bulletGo);
-
-        bulletGo.transform.position = transform.TransformPoint(muzzlePos);
-
-        _attackIntervalDelta = 0;*/
-
-        if (_target == null || _attackInterval - _synergyAttackInterval > _attackIntervalDelta)
+        if (_target == null)
         {
             ToggleLaser(false);
             return;
@@ -50,11 +37,12 @@ public class PointTurret : Turret
 
         UpdateLaser();
 
-        if (_target != null)
+        if (_target != null && _attackInterval - _synergyAttackInterval < _attackIntervalDelta)
         {
             SoundManager.Instance.PlaySound(_fireSound);
 
             ApplyDamageAndDebuffs(_target.GetComponent<Enemy>());
+            _attackIntervalDelta = 0;
         }
     }
     private void ApplyDamageAndDebuffs(Enemy enemy)

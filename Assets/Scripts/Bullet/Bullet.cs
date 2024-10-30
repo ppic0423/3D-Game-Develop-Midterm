@@ -22,7 +22,7 @@ public abstract class Bullet : MonoBehaviour
         // 생존 시간 체크
         _saveTime += Time.deltaTime;
         // 타겟이 없거나 생존 시간이 5초 이상일 경우 제거
-        if (_target == null && _saveTime >= 5.0f)
+        if (_target == null || _saveTime >= 1.0f)
         {
             CommonBulletPool.Instance.pool.Release(this.gameObject);
             return;
@@ -40,6 +40,10 @@ public abstract class Bullet : MonoBehaviour
     protected virtual void HitTarget()
     {
         CommonBulletPool.Instance.pool.Release(this.gameObject);
+        if(gameObject.activeSelf)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void AddDebuffs(Debuff debuff)

@@ -40,7 +40,7 @@ public class GatlingTurret : Turret
         bulletGo.transform.position = transform.TransformPoint(muzzlePos);
 
         AddDebuffOnBullet(bulletGo);
-        SoundManager.Instance.PlaySound(_fireSound);
+        GetComponent<AudioSource>().PlayOneShot(_fireSound);
         _attackIntervalDelta = 0;
 
         // 휴식 시간 초기화

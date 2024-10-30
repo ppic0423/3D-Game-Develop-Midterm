@@ -15,13 +15,14 @@ public class MineBullet : Bullet
         _damage = damage;
         _speed = speed;
     }
-    public void Init(Transform target, float damage, float speed, float radius)
+    public Vector3 Init(Transform target, float damage, float speed, float radius)
     {
         Init(target, damage, speed);
 
         _radius = radius;
         wayPoint = FindObjectOfType<WayPoint>();
         targetPos = GetClosestPointOnPath();
+        return targetPos;
     }
     void FixedUpdate()
     {
@@ -31,6 +32,7 @@ public class MineBullet : Bullet
     protected override void HitTarget()
     {
         MinePool.Instance.pool.Release(this.gameObject);
+        MissileEffectPool.Instance.pool.Get().transform.position = transform.position;
         m_List.Remove(this);
     }
 
@@ -65,7 +67,7 @@ public class MineBullet : Bullet
     {
         Vector3 closestPoint = Vector3.zero;
         float closestDistance = float.MaxValue;
-        float randomValue = Random.Range(0f, 1f);
+        float randomValue = Random.Range(-3f, 3f);
 
         for (int i = 0; i < wayPoint.points.Length - 1; i++)
         {

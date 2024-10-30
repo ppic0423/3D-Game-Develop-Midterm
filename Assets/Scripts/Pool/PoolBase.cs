@@ -33,11 +33,6 @@ public abstract class PoolBase : MonoBehaviour
 
     void OnReleaseObject(GameObject @object)
     {
-        Bullet[] bullets = @object.GetComponents<Bullet>();
-        foreach (Bullet _bullet in bullets)
-        {
-            Destroy(_bullet);  // 필요 시 초기화
-        }
         @object.SetActive(false); // 총알 비활성화
     }
 
